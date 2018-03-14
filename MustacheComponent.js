@@ -106,3 +106,4 @@ class Mustache {
         context.restore()
     }
 }
+customElements.define('mustache-comp', MustacheComponent)
