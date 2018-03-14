@@ -10,6 +10,7 @@ class MustacheComponent extends HTMLElement {
     }
     connectedCallback() {
         this.render()
+        console.log(this.mustache)
         this.img.onmousedown = () => {
             this.mustache.startUpdating(() =>  {
                 this.animator.start(() => {
@@ -40,7 +41,7 @@ class State {
     }
     update(stopcb) {
         this.deg += this.dir * Math.PI/20
-        this.scale = Math.sin(this.deg * Math.PI/180)
+        this.scale = Math.sin(this.deg)
         if(this.deg > Math.PI) {
             this.deg = 0
             this.dir = 0
@@ -81,22 +82,22 @@ class Mustache {
     draw(context) {
         context.save()
         context.translate(size/2, size/2)
-        for(var i = 0; i< 2; i++) {
+        for(var j = 0; j< 2; j++) {
             context.save()
-            context.rotate(Math.PI/6 * state.scale * (1 - 2 * i))
-            context.scale(1 - 2 * i, 1)
+            context.rotate(( Math.PI / 12) * this.state.scale * (1 - 2 * j))
+            context.scale(1 - 2 * j, 1)
             context.fillStyle = '#212121'
             context.beginPath()
-            context.arc(-size/20, 0, size/20, 0, 2 * Math.PI)
+            context.arc(-size/25, 0, size/25, 0, 2 * Math.PI)
             context.fill()
             context.beginPath()
             context.moveTo(-size/3, -size/10)
-            for(var i = 180; i>=75; i--) {
-                const x = -size/10 + (size/3) * Math.cos(i * Math.PI/180), y = -(size/10) + (size/10) * Math.sin(i * Math.PI/180)
+            for(var i = 180; i>=60; i--) {
+                const x = -size/10 + (size/6) * Math.cos(i * Math.PI/180), y = -(size/20) + (size/10) * Math.sin(i * Math.PI/180)
                 context.lineTo(x, y)
             }
-            for(var i = 75; i<=180;i++) {
-                const x = -size/10 + (size/3) * Math.cos(i * Math.PI/180), y = -(size/10) + (size/30) * Math.sin(i * Math.PI/180)
+            for(var i = 10; i<=180;i++) {
+                const x = -size/6 + (size/6 + size/10 - size/6) * Math.cos(i * Math.PI/180), y = -(size/20) + (size/25) * Math.sin(i * Math.PI/180)
                 context.lineTo(x, y)
             }
             context.fill()
@@ -104,6 +105,12 @@ class Mustache {
         }
 
         context.restore()
+    }
+    update(stopcb) {
+        this.state.update(stopcb)
+    }
+    startUpdating(startcb) {
+        this.state.startUpdating(startcb)
     }
 }
 customElements.define('mustache-comp', MustacheComponent)
