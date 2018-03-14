@@ -18,5 +18,27 @@ class MustacheComponent extends HTMLElement {
         context.fillRect(0, 0, size, size)
         this.img.src = canvas.toDataURL()
     }
-
+}
+class State {
+    constructor() {
+        this.scale = 0
+        this.dir = 0
+        this.deg = 0
+    }
+    update(stopcb) {
+        this.deg += this.dir * Math.PI/20
+        this.scale = Math.sin(this.deg * Math.PI/180)
+        if(this.deg > Math.PI) {
+            this.deg = 0
+            this.dir = 0
+            this.scale = 0
+            stopcb()
+        }
+    }
+    startUpdating(startcb) {
+        if (this.dir == 0) {
+            this.dir = 1
+            startcb()
+        }
+    }
 }
