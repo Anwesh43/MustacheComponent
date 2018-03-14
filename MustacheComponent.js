@@ -61,3 +61,35 @@ class Animator {
         }
     }
 }
+class Mustache {
+    constructor() {
+        this.state = new State()
+    }
+    draw(context) {
+        context.save()
+        context.translate(size/2, size/2)
+        for(var i = 0; i< 2; i++) {
+            context.save()
+            context.rotate(Math.PI/6 * state.scale * (1 - 2 * i))
+            context.scale(1 - 2 * i, 1)
+            context.fillStyle = '#212121'
+            context.beginPath()
+            context.arc(-size/20, 0, size/20, 0, 2 * Math.PI)
+            context.fill()
+            context.beginPath()
+            context.moveTo(-size/3, -size/10)
+            for(var i = 180; i>=75; i--) {
+                const x = -size/10 + (size/3) * Math.cos(i * Math.PI/180), y = -(size/10) + (size/10) * Math.sin(i * Math.PI/180)
+                context.lineTo(x, y)
+            }
+            for(var i = 75; i<=180;i++) {
+                const x = -size/10 + (size/3) * Math.cos(i * Math.PI/180), y = -(size/10) + (size/30) * Math.sin(i * Math.PI/180)
+                context.lineTo(x, y)
+            }
+            context.fill()
+            context.restore()
+        }
+
+        context.restore()
+    }
+}
