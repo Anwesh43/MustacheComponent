@@ -5,9 +5,21 @@ class MustacheComponent extends HTMLElement {
         this.img = document.createElement('img')
         const shadow = this.attachShadow({mode:'open'})
         shadow.appendChild(this.img)
+        this.mustache = new Mustache()
+        this.animator = new Animator()
     }
     connectedCallback() {
         this.render()
+        this.img.onmousedown = () => {
+            this.mustache.startUpdating(() =>  {
+                this.animator.start(() => {
+                    this.render()
+                    this.mustache.update(() => {
+                        this.animator.stop()
+                    })
+                })
+            })
+        }
     }
     render() {
         const canvas = document.createElement('canvas')
@@ -16,6 +28,7 @@ class MustacheComponent extends HTMLElement {
         const context = canvas.getContext('2d')
         context.fillStyle = '#EEEEEE'
         context.fillRect(0, 0, size, size)
+        this.mustache.draw(context)
         this.img.src = canvas.toDataURL()
     }
 }
